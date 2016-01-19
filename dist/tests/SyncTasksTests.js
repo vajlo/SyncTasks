@@ -1,4 +1,9 @@
 /// <reference path="dependencies.d.ts"/>
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var assert = require('assert');
 var SyncTasks = require('../SyncTasks');
 describe('SyncTasks', function () {
@@ -301,5 +306,43 @@ describe('SyncTasks', function () {
             assert(false);
         });
         task.resolve(1);
+    });
+    it('extend SyncTasks Internal', function (done) {
+        var ExtendedSyncTask = (function (_super) {
+            __extends(ExtendedSyncTask, _super);
+            function ExtendedSyncTask() {
+                _super.apply(this, arguments);
+            }
+            ExtendedSyncTask.prototype.extendedResolved = function () {
+                return _super.prototype.resolve.call(this, true);
+            };
+            ExtendedSyncTask.prototype.extendedFailed = function () {
+                return _super.prototype.reject.call(this, false);
+            };
+            return ExtendedSyncTask;
+        })(SyncTasks.Internal.SyncTask);
+        var resolveTask = new ExtendedSyncTask();
+        var failTask = new ExtendedSyncTask();
+        var resolveDone = false;
+        var failDone = false;
+        resolveTask.promise().then(function () {
+            assert(true);
+            resolveDone = true;
+        }, function () {
+            assert(false);
+        });
+        failTask.promise().then(function () {
+            assert(false);
+        }, function () {
+            assert(true);
+            failDone = true;
+        });
+        SyncTasks.whenAll([failTask.promise(), resolveTask.promise()]).always(function () {
+            assert(resolveDone);
+            assert(failDone);
+            done();
+        });
+        resolveTask.extendedResolved();
+        failTask.extendedFailed();
     });
 });
