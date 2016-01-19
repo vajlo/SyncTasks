@@ -2,7 +2,7 @@
 
 import assert = require('assert');
 
-import SyncTasks = require('../SyncTasks');
+import SyncTasks = require('SyncTasks');
 
 describe('SyncTasks', function () {
     it('Simple - null resolve after then', (done) => {

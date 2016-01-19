@@ -289,4 +289,3 @@ var SyncTasks;
         Internal.SyncTask = SyncTask;
     })(Internal = SyncTasks.Internal || (SyncTasks.Internal = {}));
 })(SyncTasks || (SyncTasks = {}));
-module.exports = SyncTasks;

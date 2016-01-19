@@ -11,8 +11,7 @@
  * automatically close.
  */
 
-
-module SyncTasks {
+namespace SyncTasks {
     export interface Promise<T> {
         then<U>(successFunc: (value: T) => U | Promise<U>, errorFunc?: (error: any) => U | Promise<U>): Promise<U>;
 
@@ -318,4 +317,7 @@ module SyncTasks {
         }
     }
 }
-export = SyncTasks;
+
+declare module "SyncTasks" {
+    export = SyncTasks
+}

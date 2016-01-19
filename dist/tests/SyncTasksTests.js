@@ -5,7 +5,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 var assert = require('assert');
-var SyncTasks = require('../SyncTasks');
+var SyncTasks = require('SyncTasks');
 describe('SyncTasks', function () {
     it('Simple - null resolve after then', function (done) {
         var task = SyncTasks.Defer();

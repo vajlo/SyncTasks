@@ -10,7 +10,7 @@
  * context for its calls if you send them around the event loop and transactions
  * automatically close.
  */
-declare module SyncTasks {
+declare namespace SyncTasks {
     interface Promise<T> {
         then<U>(successFunc: (value: T) => U | Promise<U>, errorFunc?: (error: any) => U | Promise<U>): Promise<U>;
         finally(func: (value: T) => any): Promise<T>;
@@ -60,4 +60,6 @@ declare module SyncTasks {
         }
     }
 }
-export = SyncTasks;
+declare module "SyncTasks" {
+    export = SyncTasks;
+}
