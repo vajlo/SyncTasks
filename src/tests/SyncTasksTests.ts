@@ -364,4 +364,43 @@ describe('SyncTasks', function () {
 
         task.resolve(1);
     });
+
+    it('extend SyncTasks Internal', (done) => {
+        class ExtendedSyncTask extends SyncTasks.Internal.SyncTask<boolean> {
+            extendedResolved(): SyncTasks.Deferred<boolean> {
+                return super.resolve(true);
+            }
+
+            extendedFailed(): SyncTasks.Deferred<boolean> {
+                return super.reject(false);
+            }
+        }
+        let resolveTask = new ExtendedSyncTask();
+        let failTask = new ExtendedSyncTask();
+        let resolveDone = false;
+        let failDone = false;
+
+        resolveTask.promise().then(() => {
+            assert(true);
+            resolveDone = true;
+        }, () => {
+            assert(false);
+        });
+
+        failTask.promise().then(() => {
+            assert(false);
+        }, () => {
+            assert(true);
+            failDone = true;
+        });
+
+        SyncTasks.whenAll([failTask.promise(), resolveTask.promise()]).always(() => {
+            assert(resolveDone);
+            assert(failDone);
+            done();
+        });
+
+        resolveTask.extendedResolved();
+        failTask.extendedFailed();
+    });
 });
